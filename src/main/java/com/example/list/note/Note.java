@@ -1,4 +1,4 @@
-package note;
+package com.example.list.note;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
