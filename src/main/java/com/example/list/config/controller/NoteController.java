@@ -1,11 +1,15 @@
 package com.example.list.config.controller;
 
+import com.example.list.note.Note;
 import com.example.list.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @RequestMapping("/note")
@@ -32,5 +36,11 @@ public class NoteController {
         return "redirect:/note/list";
     }
 
-
+    @GetMapping("/edit")
+    public ModelAndView showEditNotePage(/*@RequestParam */Long id/*, Model model*/) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("note/edit");
+        modelAndView.addObject("note", noteService.getById(id));
+        return modelAndView;
+    }
 }
