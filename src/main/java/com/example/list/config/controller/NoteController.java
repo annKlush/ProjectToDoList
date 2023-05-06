@@ -15,11 +15,11 @@ import java.util.stream.IntStream;
 @Controller
 public class NoteController {
     private final NoteService noteService;
-    @GetMapping("/HP")
+    @GetMapping("/")
     @ResponseBody
     public ModelAndView note(Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("HP");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 
