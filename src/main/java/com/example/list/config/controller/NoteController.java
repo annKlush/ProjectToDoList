@@ -44,6 +44,14 @@ public class NoteController {
         return modelAndView;
     }
 
+    @PostMapping("/edit")
+    public RedirectView editNote(@ModelAttribute Note note) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("edit");
+        noteService.update(note);
+        return new RedirectView("/note/list");
+    }
+
     @GetMapping("/add")
     public String showSaveForm(Model model) {
         model.addAttribute("note", new Note());
