@@ -46,6 +46,7 @@ public class NoteController {
     public String add(@ModelAttribute Note note) {
         noteService.add(note);
         return "redirect:/note/list";
+    }
 
     @GetMapping("/edit")
     public ModelAndView showEditNotePage(/*@RequestParam */Long id/*, Model model*/) {
@@ -63,5 +64,5 @@ public class NoteController {
         return new RedirectView("/note/list");
     }
 
-    }
+
 }
