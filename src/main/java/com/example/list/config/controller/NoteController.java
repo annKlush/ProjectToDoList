@@ -3,6 +3,7 @@ package com.example.list.config.controller;
 import com.example.list.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class NoteController {
     private final NoteService noteService;
+    @GetMapping("/HP")
+    @ResponseBody
+    public ModelAndView note(Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("HP");
+        return modelAndView;
+    }
 
     @GetMapping("/list")
     public ModelAndView getAllNotes() {
@@ -23,5 +31,6 @@ public class NoteController {
         noteService.deleteById(id);
         return "redirect:/note/list";
     }
+
 
 }
