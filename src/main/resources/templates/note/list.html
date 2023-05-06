@@ -24,20 +24,20 @@
             <td><span th:text="${note.getContent()}"> </span></td>
             <td>
                 <form th:action="@{/note/edit/{id}(id = ${note.getId()})}">
-                    <button type="submit" class="btn btn-outline-success">Edit</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </td>
             <td>
                 <form th:action="@{/note/delete/}" method="post">
                     <input type="hidden" name="id" th:value="${note.id}" />
-                    <button type="submit" class="btn btn-outline-success">Delete</button>
+                    <button type="submit" class="btn btn-primary">Delete</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table></br>
     <form action="/note/add">
-        <button type="submit" class="btn btn-outline-success">Add new note</button>
+        <button type="submit" class="btn btn-outline-success" href="/note/add">Add new note</button>
     </form>
 </div>
 
