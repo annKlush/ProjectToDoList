@@ -13,12 +13,15 @@ public class Note {
     private String title;
     private String content;
 
+    private Boolean pub_access;
+
     public Note() {
     }
 
-    public Note(String title, String content) {
+    public Note(String title, String content, Boolean pub_access) {
         this.title = title;
         this.content = content;
+        this.pub_access = pub_access;
     }
 
     public Long getId() {
@@ -43,6 +46,14 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Boolean getPub_access() {
+        return pub_access;
+    }
+
+    public void setPub_access(Boolean pub_access) {
+        this.pub_access = pub_access;
     }
 
     @Override

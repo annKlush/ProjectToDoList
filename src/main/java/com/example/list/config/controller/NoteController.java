@@ -48,20 +48,38 @@ public class NoteController {
         return "redirect:/note/list";
     }
 
-    @GetMapping("/edit")
-    public ModelAndView showEditNotePage(/*@RequestParam */Long id/*, Model model*/) {
+//    @GetMapping("/note/edit")
+//    public String showEditForm(@RequestParam("id") long id, Model model) {
+//        Note note = noteService.getById(id);
+//        model.addAttribute("note", note);
+//        return "edit";
+//    }
+
+    @GetMapping("/note/edit")
+    public ModelAndView showEditNotePage(Long id) {
+        ModelAndView result = new ModelAndView("note/edit");
+        result.addObject("note", noteService.getById(id));
+        return result;
+    }
+
+    @PostMapping("/note/edit")
+    public RedirectView editNote(@ModelAttribute Note note) {
+        noteService.update(note);
+        return new RedirectView("/note/list");
+    }
+
+    @GetMapping("/auth/login")
+    public ModelAndView loginPage(Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("note/edit");
-        modelAndView.addObject("note", noteService.getById(id));
+        modelAndView.setViewName("auth/login");
         return modelAndView;
     }
 
-    @PostMapping("/edit")
-    public RedirectView editNote(@ModelAttribute Note note) {
+    @GetMapping("/auth/register")
+    public ModelAndView registerPage(Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("edit");
-        noteService.update(note);
-        return new RedirectView("/note/list");
+        modelAndView.setViewName("auth/register");
+        return modelAndView;
     }
 
 
