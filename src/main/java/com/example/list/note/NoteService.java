@@ -13,4 +13,22 @@ public class NoteService {
     public List<Note> getAll() {
         return noteRepository.findAll();
     }
+
+    public Note add(Note note) {
+        return noteRepository.save(note);
+    }
+
+    public void deleteById(long id) {
+        noteRepository.deleteById(id);
+    }
+
+    public void update(Note note) {
+        noteRepository.save(note);
+    }
+
+    public Note getById(long id) {
+        return noteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Note with id " + id + " not found"));
+    }
+
 }

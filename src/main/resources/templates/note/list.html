@@ -28,7 +28,8 @@
                 </form>
             </td>
             <td>
-                <form th:action="@{/note/delete/{id}(id = ${note.getId()})}" method="post">
+                <form th:action="@{/note/delete/}" method="post">
+                    <input type="hidden" name="id" th:value="${note.id}" />
                     <button type="submit" class="btn btn-outline-success">Delete</button>
                 </form>
             </td>

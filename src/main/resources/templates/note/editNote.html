@@ -1,0 +1,18 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Edit Note</title>
+</head>
+<body>
+<h1>Edit Note</h1>
+<form th:action="@{/note/edit}" method="post" th:object="${note}">
+  <input type="hidden" th:field="*{id}" />
+  <label>Title:</label><br />
+  <input type="text" th:field="*{title}" /><br />
+  <label>Content:</label><br />
+  <textarea th:field="*{content}"></textarea><br />
+  <button type="submit">Save</button>
+</form>
+<a href="/note/list">Back to list</a>
+</body>
+</html>
