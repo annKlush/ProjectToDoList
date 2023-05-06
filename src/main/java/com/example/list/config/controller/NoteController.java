@@ -18,4 +18,10 @@ public class NoteController {
         result.addObject("noteList", noteService.getAll());
         return result;
     }
+    @PostMapping("/delete")
+    public String deleteNote(@RequestParam("id") long id) {
+        noteService.deleteById(id);
+        return "redirect:/note/list";
+    }
+
 }
