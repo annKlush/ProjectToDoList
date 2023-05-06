@@ -43,4 +43,16 @@ public class NoteController {
         modelAndView.addObject("note", noteService.getById(id));
         return modelAndView;
     }
+
+    @GetMapping("/add")
+    public String showSaveForm(Model model) {
+        model.addAttribute("note", new Note());
+        return "note/add";
+    }
+
+    @PostMapping("/add")
+    public String save(@ModelAttribute Note note, Model model) {
+        model.addAttribute("notes", noteService.add(note));
+        return "/note/add";
+    }
 }
