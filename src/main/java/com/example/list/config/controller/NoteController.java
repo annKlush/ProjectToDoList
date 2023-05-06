@@ -12,7 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
-@RequestMapping("/note")
 @Controller
 public class NoteController {
     private final NoteService noteService;
@@ -24,17 +23,29 @@ public class NoteController {
         return modelAndView;
     }
 
-    @GetMapping("/list")
+    @GetMapping("/note/list")
     public ModelAndView getAllNotes() {
         ModelAndView result = new ModelAndView("note/list");
         result.addObject("noteList", noteService.getAll());
         return result;
     }
-    @PostMapping("/delete")
+    @PostMapping("/note/delete")
     public String deleteNote(@RequestParam("id") long id) {
         noteService.deleteById(id);
         return "redirect:/note/list";
     }
+
+
+    @GetMapping("/note/add")
+    public ModelAndView add(Model model) {
+        ModelAndView result = new ModelAndView("note/add");
+        return result;
+    }
+
+    @PostMapping("/note/add")
+    public String add(@ModelAttribute Note note) {
+        noteService.add(note);
+        return "redirect:/note/list";
 
     @GetMapping("/edit")
     public ModelAndView showEditNotePage(/*@RequestParam */Long id/*, Model model*/) {
@@ -52,15 +63,5 @@ public class NoteController {
         return new RedirectView("/note/list");
     }
 
-    @GetMapping("/add")
-    public String showSaveForm(Model model) {
-        model.addAttribute("note", new Note());
-        return "note/add";
-    }
-
-    @PostMapping("/add")
-    public String save(@ModelAttribute Note note, Model model) {
-        model.addAttribute("notes", noteService.add(note));
-        return "/note/add";
     }
 }
