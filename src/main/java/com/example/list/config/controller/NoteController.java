@@ -35,6 +35,10 @@ public class NoteController {
         return "redirect:/note/list";
     }
 
+    @PostMapping("/auth/SignUp")
+    public String signUpM(Model model) {
+       return "redirect:/auth/register";
+    }
 
     @GetMapping("/note/add")
     public ModelAndView add(Model model) {
