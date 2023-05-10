@@ -53,9 +53,9 @@ public class NoteController {
     }
 
     @GetMapping("/note/add")
-    public ModelAndView add(Model model) {
-        ModelAndView result = new ModelAndView("note/add");
-        return result;
+    public String add(Model model) {
+        model.addAttribute("note", new Note());
+        return "note/add";
     }
 
     @PostMapping("/note/add")
@@ -68,13 +68,6 @@ public class NoteController {
             return "redirect:/note/error?errorMessage=" + getErrorMessage(note);
         }
     }
-
-//    @GetMapping("/note/edit")
-//    public String showEditForm(@RequestParam("id") long id, Model model) {
-//        Note note = noteService.getById(id);
-//        model.addAttribute("note", note);
-//        return "edit";
-//    }
 
     @GetMapping("/note/edit")
     public ModelAndView showEditNotePage(Long id) {

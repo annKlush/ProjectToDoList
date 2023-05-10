@@ -10,18 +10,26 @@
 </head>
 <body>
 <div class = "container">
-<h1>Add Note</h1>
-<form method="post" action="/note/add">
-  <label class="form-label" for="title">Title:</label>
-  <input  class="form-control" type="text" id="title" name="title" required  placeholder="Title">
+  <h1>Add Note</h1>
+  <form method="post" th:object="${note}" action="/note/add">
+    <label class="form-label" for="title">Title:</label>
+    <input minlength="5" maxlength="100" class="form-control" type="text" id="title" name="title" required  placeholder="Title">
+    <br>
+    <label class="form-label" for="content">Content:</label>
+    <textarea minlength="5" maxlength="10000" class="form-control" rows="20" id="content" name="content" required placeholder="Content"></textarea>
+    <br>
+    <div>
+      <div th:each="accessType : ${T(com.example.list.note.AccessType).values()}">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" th:field="*{accessType}" th:value="${accessType}" class="custom-control-input" th:checked="${accessType == T(com.example.list.note.AccessType).PRIVATE}">
+          <label class="custom-control-label" th:for="${#ids.prev('accessType')}" th:text="${accessType}">accessType</label>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-outline-success" type="submit">Save</button>
+  </form>
   <br>
-  <label class="form-label" for="content">Content:</label>
-  <textarea class="form-control" id="content" name="content" required placeholder="Content"></textarea>
-  <br>
-  <button class="btn btn-outline-success" type="submit">Save</button>
-</form>
-<br>
-<a class="link-opacity-75" href="/note/list">Back to List</a>
+  <a class="link-opacity-75" href="/note/list">Back to List</a>
 
 </div>
 <div th:replace="/parts/bootstrapJS::bootstrapJS"></div>

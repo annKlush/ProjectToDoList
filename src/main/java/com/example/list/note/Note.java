@@ -1,9 +1,6 @@
 package com.example.list.note;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Note {
@@ -13,15 +10,20 @@ public class Note {
     private String title;
     private String content;
 
-    private Boolean pub_access;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "accesstype")
+    private AccessType accessType;
+
+    @Column(name = "user_id")
+    private Long user_id;
 
     public Note() {
     }
 
-    public Note(String title, String content, Boolean pub_access) {
+    public Note(String title, String content, AccessType accessType) {
         this.title = title;
         this.content = content;
-        this.pub_access = pub_access;
+        this.accessType = accessType;
     }
 
     public Long getId() {
@@ -48,12 +50,20 @@ public class Note {
         this.content = content;
     }
 
-    public Boolean getPub_access() {
-        return pub_access;
+    public AccessType getAccessType() {
+        return accessType;
     }
 
-    public void setPub_access(Boolean pub_access) {
-        this.pub_access = pub_access;
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
+    }
+
+    public Long getUser() {
+        return user_id;
+    }
+
+    public void setUser(Long user_id) {
+        this.user_id = user_id;
     }
 
     @Override
@@ -62,6 +72,8 @@ public class Note {
         sb.append("id=").append(id);
         sb.append(", title='").append(title).append('\'');
         sb.append(", content='").append(content).append('\'');
+        sb.append(", accessType='").append(accessType).append('\'');
+        sb.append(", user='").append(user_id).append('\'');
         sb.append('}');
         return sb.toString();
     }
