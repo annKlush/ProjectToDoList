@@ -1,8 +1,19 @@
 package com.example.list.config.controller;
 
+import com.example.list.dto.LoginDto;
+import com.example.list.dto.RegisterDto;
 import com.example.list.note.Note;
 import com.example.list.note.NoteService;
+import com.example.list.user.Role;
+import com.example.list.user.RoleRepository;
+import com.example.list.user.UserEntity;
+import com.example.list.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
@@ -18,7 +30,13 @@ import static com.example.list.note.NoteFieldsValidation.isNoteFieldsValid;
 @RequiredArgsConstructor
 @Controller
 public class NoteController {
+
     private final NoteService noteService;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @GetMapping("/")
     @ResponseBody
     public ModelAndView note(Model model) {
@@ -45,11 +63,6 @@ public class NoteController {
     public String deleteNote(@RequestParam("id") long id) {
         noteService.deleteById(id);
         return "redirect:/note/list";
-    }
-
-    @PostMapping("/auth/SignUp")
-    public String signUpM(Model model) {
-       return "redirect:/auth/register";
     }
 
     @GetMapping("/note/add")
@@ -89,19 +102,40 @@ public class NoteController {
         }
     }
 
-    @GetMapping("/auth/login")
-    public ModelAndView loginPage(Model model) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("auth/login");
-        return modelAndView;
+
+    @GetMapping("/register")
+    public String showRegistrationForm() {
+        return "auth/register";
     }
 
-    @GetMapping("/auth/register")
-    public ModelAndView registerPage(Model model) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("auth/register");
-        return modelAndView;
+    @PostMapping("/register")
+    public RedirectView processRegistrationForm(@ModelAttribute RegisterDto registerDto) {
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
+        Role role = roleRepository.findByName("USER").get();
+        user.setRoles(Collections.singletonList(role));
+        userRepository.save(user);
+
+        return new RedirectView("/login");
     }
 
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "auth/login";
+    }
 
+    @PostMapping("/login")
+    public RedirectView processLogin(@ModelAttribute LoginDto loginDto) {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/note/list");
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsername(),
+                        loginDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return redirectView;
+    }
 }
