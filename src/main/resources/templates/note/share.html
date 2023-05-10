@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shared Note</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center my-4">Shared Note</h2>
+    <div class="alert alert-info">
+        <p>Share this note with others:</p>
+        <input type="text" class="form-control" value="${shareUrl}" readonly>
+    </div>
+
+    <h4>Note Details:</h4>
+    <div>
+        <p><strong>Title:</strong> <span th:text="${note.getTitle()}"></span></p>
+        <p><strong>Content:</strong> <span th:text="${note.getContent()}"></span></p>
+    </div>
+
+    <div th:replace="/parts/bootstrapJS::bootstrapJS"></div>
+</div>
+</body>
+</html>

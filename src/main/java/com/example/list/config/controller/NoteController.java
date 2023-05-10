@@ -1,5 +1,6 @@
 package com.example.list.config.controller;
 
+import com.example.list.note.AccessType;
 import com.example.list.note.Note;
 import com.example.list.note.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.IntStream;
 
 import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
@@ -103,5 +105,26 @@ public class NoteController {
         return modelAndView;
     }
 
+    private String getBaseUrl(HttpServletRequest request) {
+        String requestUrl = request.getRequestURI().toString();
+        String servletPath = request.getServletPath();
+        return requestUrl.replace(servletPath, "");
+    }
+
+    @GetMapping("/note/share/{id}")
+    public ModelAndView shareNotePage(@PathVariable("id") Long id, HttpServletRequest request) {
+        ModelAndView result;
+        Note note = noteService.getById(id);
+        if (note == null || note.getAccessType() == AccessType.PRIVATE) {
+            result = new ModelAndView("not-found");
+        } else {
+            result = new ModelAndView("note/share");
+            String baseUrl = getBaseUrl(request);
+            String shareUrl = baseUrl + "/note/share" + id;
+            result.addObject("note", note);
+            result.addObject("shareUrl", shareUrl);
+        }
+        return result;
+    }
 
 }
