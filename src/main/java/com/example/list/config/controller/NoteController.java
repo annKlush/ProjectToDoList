@@ -7,9 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.stream.IntStream;
+
+import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
+import static com.example.list.note.NoteFieldsValidation.isNoteFieldsValid;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,6 +33,14 @@ public class NoteController {
         result.addObject("noteList", noteService.getAll());
         return result;
     }
+
+    @GetMapping("/note/error")
+    public ModelAndView errorPage(@RequestParam("errorMessage") String errorMessage) {
+        ModelAndView result = new ModelAndView("note/error");
+        result.addObject("errorMessage", errorMessage);
+        return result;
+    }
+
     @PostMapping("/note/delete")
     public String deleteNote(@RequestParam("id") long id) {
         noteService.deleteById(id);
@@ -41,23 +53,21 @@ public class NoteController {
     }
 
     @GetMapping("/note/add")
-    public ModelAndView add(Model model) {
-        ModelAndView result = new ModelAndView("note/add");
-        return result;
+    public String add(Model model) {
+        model.addAttribute("note", new Note());
+        return "note/add";
     }
 
     @PostMapping("/note/add")
     public String add(@ModelAttribute Note note) {
-        noteService.add(note);
-        return "redirect:/note/list";
+        if (isNoteFieldsValid(note)) {
+            noteService.add(note);
+            return "redirect:/note/list";
+        }
+        else {
+            return "redirect:/note/error?errorMessage=" + getErrorMessage(note);
+        }
     }
-
-//    @GetMapping("/note/edit")
-//    public String showEditForm(@RequestParam("id") long id, Model model) {
-//        Note note = noteService.getById(id);
-//        model.addAttribute("note", note);
-//        return "edit";
-//    }
 
     @GetMapping("/note/edit")
     public ModelAndView showEditNotePage(Long id) {
@@ -67,9 +77,16 @@ public class NoteController {
     }
 
     @PostMapping("/note/edit")
-    public RedirectView editNote(@ModelAttribute Note note) {
-        noteService.update(note);
-        return new RedirectView("/note/list");
+    public RedirectView editNote(@ModelAttribute Note note, RedirectAttributes attributes) {
+        if (isNoteFieldsValid(note)) {
+            noteService.update(note);
+            return new RedirectView("/note/list");
+        }
+        else {
+            RedirectView redirectView = new RedirectView("/note/error");
+            attributes.addAttribute("errorMessage", getErrorMessage(note));
+            return redirectView;
+        }
     }
 
     @GetMapping("/auth/login")

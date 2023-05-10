@@ -15,14 +15,18 @@
   <h1 class="text-center my-4">Register</h1>
   <h2 class="text-center my-4">Enter your Username and Password</h2>
   <div class="form-group" style= "display: flex; align-items: center; justify-content: center;">
-    <form action="/register" method="post">
+    <form action="/register" method="post" class="was-validated">
       <div class="form-group">
         <label for="username">User name:</label>
-        <input type="text" class="form-control" placeholder="Username" id="username" name="username">
+        <input type="text" class="form-control" placeholder="Username" id="username" minlength="5" maxlength="20" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field(must be 5-20 symbols).</div>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" class="form-control" placeholder="Password" id="password" name="password">
+        <input type="password" class="form-control" placeholder="Password" id="password" minlength="8" maxlength="20" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field(must be 8-20 symbols).</div>
       </div>
       <br>
       <button class="btn btn-primary btn-block" type="submit">Submit</button>

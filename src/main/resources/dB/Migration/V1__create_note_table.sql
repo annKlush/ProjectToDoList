@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS Note (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50),
-    content VARCHAR(1000),
-    pub_access BOOLEAN DEFAULT FALSE
-    );
