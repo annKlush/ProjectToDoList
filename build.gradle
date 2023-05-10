@@ -38,3 +38,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootJar {
+	// Налаштування профілів для виконання
+	enabled = true
+	launchScript()
+}
