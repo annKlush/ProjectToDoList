@@ -19,6 +19,7 @@
             <th scope="col" style="width:55%">Content</th>
             <th scope="col" style="width:10%">Edit</th>
             <th scope="col" style="width:10%">Delete</th>
+            <th scope="col" style="width:10%">Share</th>
         </tr>
         </thead>
         <tbody>
@@ -35,6 +36,12 @@
                 <form th:action="@{/note/delete/}" method="post">
                     <input type="hidden" name="id" th:value="${note.id}" />
                     <button type="submit" class="btn btn-primary">Delete</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/note/share/}">
+                    <input type="hidden" name="id" th:value="${note.id}" />
+                    <button type="submit" class="btn btn-primary">Share</button>
                 </form>
             </td>
         </tr>

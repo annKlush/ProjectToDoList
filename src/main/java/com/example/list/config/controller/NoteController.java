@@ -111,20 +111,18 @@ public class NoteController {
         return requestUrl.replace(servletPath, "");
     }
 
-    @GetMapping("/note/share/{id}")
-    public ModelAndView shareNotePage(@PathVariable("id") Long id, HttpServletRequest request) {
-        ModelAndView result;
+    @GetMapping("/note/share")
+    public ModelAndView share(Long id) {
         Note note = noteService.getById(id);
-        if (note == null || note.getAccessType() == AccessType.PRIVATE) {
-            result = new ModelAndView("not-found");
-        } else {
-            result = new ModelAndView("note/share");
-            String baseUrl = getBaseUrl(request);
-            String shareUrl = baseUrl + "/note/share" + id;
-            result.addObject("note", note);
-            result.addObject("shareUrl", shareUrl);
+        if (note.getAccessType() == AccessType.PUBLIC) {
+            ModelAndView sh = new ModelAndView("note/share");
+            sh.addObject("note", note);
+            return sh;
         }
-        return result;
+        else {
+            ModelAndView er = new ModelAndView("note/not-found");
+            return er;
+        }
     }
 
 }
