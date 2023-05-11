@@ -1,9 +1,18 @@
 package com.example.list.config.controller;
 
+import com.example.list.dto.LoginDto;
+import com.example.list.dto.RegisterDto;
 import com.example.list.note.AccessType;
 import com.example.list.note.Note;
 import com.example.list.note.NoteService;
+import com.example.list.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
@@ -21,6 +32,11 @@ import static com.example.list.note.NoteFieldsValidation.isNoteFieldsValid;
 @Controller
 public class NoteController {
     private final NoteService noteService;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @GetMapping("/")
     @ResponseBody
     public ModelAndView note(Model model) {
@@ -35,6 +51,28 @@ public class NoteController {
         result.addObject("noteList", noteService.getAll());
         return result;
     }
+    /*
+    @GetMapping("/note/list")
+    public ModelAndView getAllNotes() {
+        ModelAndView result = new ModelAndView("note/list");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+           // result.addObject("noteList", noteService.findNotesByUser(authentication));
+        }
+        return result;
+    }
+*/
+   /* version chatgpt
+   @GetMapping("/note/list")
+
+    public ModelAndView showNotes(@RequestParam("user") String user_id,
+                                  @RequestParam("access") String access) {
+        List<Note> notes = noteService.getNotesByUserAndAccess(user, access);
+        ModelAndView modelAndView = new ModelAndView("notes");
+        modelAndView.addObject("notes", notes);
+        return modelAndView;
+    }*/
 
     @GetMapping("/note/error")
     public ModelAndView errorPage(@RequestParam("errorMessage") String errorMessage) {
@@ -124,5 +162,38 @@ public class NoteController {
             return er;
         }
     }
+    @GetMapping("/register")
+    public String showRegistrationForm() {
+        return "auth/register";
+    }
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "auth/login";
+    }
+    @PostMapping("/register")
+    public RedirectView processRegistrationForm(@ModelAttribute RegisterDto registerDto) {
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
+        Role role = roleRepository.findByName("USER").get();
+        user.setRoles(Collections.singletonList(role));
+        userRepository.save(user);
 
+        return new RedirectView("/login");
+    }
+
+
+    @PostMapping("/login")
+    public RedirectView processLogin(@ModelAttribute LoginDto loginDto) {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/note/list");
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsername(),
+                        loginDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return redirectView;
+    }
 }

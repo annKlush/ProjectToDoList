@@ -17,6 +17,7 @@
         <tr>
             <th scope="col" style="width:15%">Title</th>
             <th scope="col" style="width:55%">Content</th>
+            <th scope="col" style="width:55%">Access</th>
             <th scope="col" style="width:10%">Edit</th>
             <th scope="col" style="width:10%">Delete</th>
             <th scope="col" style="width:10%">Share</th>
@@ -26,6 +27,7 @@
         <tr th:each="note : ${noteList}">
             <td><span th:text="${note.getTitle()}"> </span></td>
             <td><span th:text="${note.getContent()}"> </span></td>
+            <td><span th:text="${note.getAccessType()}"> </span></td>
             <td>
                 <form th:action="@{/note/edit/}">
                     <input type="hidden" name="id" th:value="${note.id}" />
