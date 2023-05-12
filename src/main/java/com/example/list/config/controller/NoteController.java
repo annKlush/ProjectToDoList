@@ -49,30 +49,9 @@ public class NoteController {
     public ModelAndView getAllNotes() {
         ModelAndView result = new ModelAndView("note/list");
         result.addObject("noteList", noteService.getAll());
+        result.addObject("author", noteService.author());
         return result;
     }
-    /*
-    @GetMapping("/note/list")
-    public ModelAndView getAllNotes() {
-        ModelAndView result = new ModelAndView("note/list");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-           // result.addObject("noteList", noteService.findNotesByUser(authentication));
-        }
-        return result;
-    }
-*/
-   /* version chatgpt
-   @GetMapping("/note/list")
-
-    public ModelAndView showNotes(@RequestParam("user") String user_id,
-                                  @RequestParam("access") String access) {
-        List<Note> notes = noteService.getNotesByUserAndAccess(user, access);
-        ModelAndView modelAndView = new ModelAndView("notes");
-        modelAndView.addObject("notes", notes);
-        return modelAndView;
-    }*/
 
     @GetMapping("/note/error")
     public ModelAndView errorPage(@RequestParam("errorMessage") String errorMessage) {

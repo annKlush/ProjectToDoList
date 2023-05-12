@@ -3,8 +3,12 @@ package com.example.list.note;
 import com.example.list.user.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,9 +33,11 @@ public class NoteService {
         noteRepository.save(note);
     }
 
-    /*public List<Note> findNotesByUser(Users user) {
-        return noteRepository.findByUserIdAndAccesstype(user.getId(), AccessType.PUBLIC.toString());
-    }*/
+    public String author() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        return authentication.getName();
+    }
 
     public Note getById(long id) {
         return noteRepository.findById(id)
