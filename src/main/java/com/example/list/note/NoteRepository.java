@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
-    @Query("SELECT n FROM Note n WHERE (n.user = :user OR n.accessType = :accessType)")
-    List<Note> findByUserAndAccessType(UserEntity user, AccessType accessType);
+    List<Note> findByUserOrAccessType(UserEntity user, AccessType accessType);
 }

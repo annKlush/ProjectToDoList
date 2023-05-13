@@ -23,8 +23,8 @@ public class NoteService {
         return noteRepository.findAll();
     }
 
-    public List<Note> getAllNotesByUserAndAccessType(UserEntity user, AccessType accessType) {
-        return noteRepository.findByUserAndAccessType(user, accessType);
+    public List<Note> getAllNotesByUserOrAccessType(UserEntity user, AccessType accessType) {
+        return noteRepository.findByUserOrAccessType(user, accessType);
     }
 
     public Note add(Note note) {

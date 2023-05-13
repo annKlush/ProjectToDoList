@@ -50,7 +50,7 @@ public class NoteController {
     public ModelAndView getAllNotes(Authentication authentication) {
         ModelAndView result = new ModelAndView("note/list");
         UserEntity user = userRepository.findByUsername(noteService.author()).get();
-        List<Note> notes = noteService.getAllNotesByUserAndAccessType(user, AccessType.PUBLIC);
+        List<Note> notes = noteService.getAllNotesByUserOrAccessType(user, AccessType.PUBLIC);
         result.addObject("noteList", notes);
         result.addObject("author", noteService.author());
         return result;
