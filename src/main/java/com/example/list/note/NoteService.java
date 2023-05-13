@@ -1,15 +1,18 @@
 package com.example.list.note;
 
 import com.example.list.user.UserEntity;
+import com.example.list.user.UserRepository;
+import com.example.list.user.UserService;
 import com.example.list.user.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +22,13 @@ public class NoteService {
     @Autowired
     private final NoteRepository noteRepository;
 
+//    @Autowired
+//    private final UserRepository userRepository;
+
     public List<Note> getAll() {
         return noteRepository.findAll();
     }
 
-    public List<Note> getAllNotesByUserOrAccessType(UserEntity user, AccessType accessType) {
-        return noteRepository.findByUserOrAccessType(user, accessType);
-    }
 
     public Note add(Note note) {
         return noteRepository.save(note);
@@ -39,6 +42,10 @@ public class NoteService {
         noteRepository.save(note);
     }
 
+    public List<Note> getNotesByUserAndAccess(Long UserId) {
+
+           return noteRepository.findByUseridOrAccessType(UserId, AccessType.PUBLIC);
+    }
 
     public String author() {
         SecurityContext context = SecurityContextHolder.getContext();

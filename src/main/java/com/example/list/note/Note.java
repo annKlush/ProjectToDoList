@@ -1,7 +1,5 @@
 package com.example.list.note;
 
-import com.example.list.user.UserEntity;
-
 import javax.persistence.*;
 
 @Entity
@@ -16,12 +14,8 @@ public class Note {
     @Column(name = "accesstype")
     private AccessType accessType;
 
-//    @Column(name = "user_id")
-//    private Long user_id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @Column(name = "userid")
+    private Long userid;
 
     public Note() {
     }
@@ -64,20 +58,12 @@ public class Note {
         this.accessType = accessType;
     }
 
-//    public Long getUser() {
-//        return user_id;
-//    }
-//
-//    public void setUser(Long user_id) {
-//        this.user_id = user_id;
-//    }
-
-    public UserEntity getUser() {
-        return user;
+    public Long getUser() {
+        return userid;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUser(Long user_id) {
+        this.userid = user_id;
     }
 
     @Override
@@ -87,7 +73,7 @@ public class Note {
         sb.append(", title='").append(title).append('\'');
         sb.append(", content='").append(content).append('\'');
         sb.append(", accessType='").append(accessType).append('\'');
-        sb.append(", user='").append(user).append('\'');
+        sb.append(", user='").append(userid).append('\'');
         sb.append('}');
         return sb.toString();
     }
