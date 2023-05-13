@@ -29,6 +29,7 @@ public class NoteService {
         return noteRepository.findAll();
     }
 
+
     public Note add(Note note) {
         return noteRepository.save(note);
     }

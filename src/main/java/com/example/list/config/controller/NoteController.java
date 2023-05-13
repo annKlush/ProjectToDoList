@@ -67,6 +67,7 @@ public String note(Model model, Authentication authentication) {
     public String getAllNotes(Model model) {
         //ModelAndView result = new ModelAndView("note/list");
         UserEntity user = userRepository.findByUsername(noteService.author()).get();
+
         List<Note> notes = noteService.getNotesByUserAndAccess(user.getId());
 //        result.addObject("noteList", notes);
 //        result.addObject("author", noteService.author());
@@ -76,6 +77,7 @@ public String note(Model model, Authentication authentication) {
         model.addAttribute("author", noteService.author());
         model.addAttribute("authentication", authentication);
         return "note/list";
+
     }
 
 //    public String note(Model model, Authentication authentication) {
