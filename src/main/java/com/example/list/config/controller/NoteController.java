@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -25,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Optional;
 
 import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
 import static com.example.list.note.NoteFieldsValidation.isNoteFieldsValid;
@@ -48,9 +47,11 @@ public class NoteController {
     }
 
     @GetMapping("/note/list")
-    public ModelAndView getAllNotes() {
+    public ModelAndView getAllNotes(Authentication authentication) {
         ModelAndView result = new ModelAndView("note/list");
-        result.addObject("noteList", noteService.getAll());
+        UserEntity user = userRepository.findByUsername(noteService.author()).get();
+        List<Note> notes = noteService.getAllNotesByUserAndAccessType(user, AccessType.PUBLIC);
+        result.addObject("noteList", notes);
         result.addObject("author", noteService.author());
         return result;
     }
@@ -80,8 +81,10 @@ public class NoteController {
     }
 
     @PostMapping("/note/add")
-    public String add(@ModelAttribute Note note) {
+    public String add(@ModelAttribute Note note, Authentication authentication) {
         if (isNoteFieldsValid(note)) {
+            UserEntity user = userRepository.findByUsername(authentication.getName()).get();
+            note.setUser(user);
             noteService.add(note);
             return "redirect:/note/list";
         }
