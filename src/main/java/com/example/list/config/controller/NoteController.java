@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static com.example.list.note.NoteFieldsValidation.getErrorMessage;
 import static com.example.list.note.NoteFieldsValidation.isNoteFieldsValid;
@@ -38,23 +37,52 @@ public class NoteController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/")
-    @ResponseBody
-    public ModelAndView note(Model model) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
-    }
+//    @GetMapping("/")
+//    @ResponseBody
+//    public ModelAndView note(Model model, Authentication authentication) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("authentication", authentication);
+//        modelAndView.setViewName("index");
+//        return modelAndView;
+//    }
+@GetMapping("/")
+public String note(Model model, Authentication authentication) {
+    model.addAttribute("authentication", authentication);
+    return "index";
+}
+
+//    @GetMapping("/note/list")
+//    public ModelAndView getAllNotes() {
+//        ModelAndView result = new ModelAndView("note/list");
+//        UserEntity user = userRepository.findByUsername(noteService.author()).get();
+//        List<Note> notes = noteService.getNotesByUserAndAccess(user.getId());
+//        result.addObject("noteList", notes);
+//        result.addObject("author", noteService.author());
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        result.addObject("authentication", authentication);
+//        return result;
+//    }
 
     @GetMapping("/note/list")
-    public ModelAndView getAllNotes(Authentication authentication) {
-        ModelAndView result = new ModelAndView("note/list");
+    public String getAllNotes(Model model) {
+        //ModelAndView result = new ModelAndView("note/list");
         UserEntity user = userRepository.findByUsername(noteService.author()).get();
-        List<Note> notes = noteService.getAllNotesByUserAndAccessType(user, AccessType.PUBLIC);
-        result.addObject("noteList", notes);
-        result.addObject("author", noteService.author());
-        return result;
+        List<Note> notes = noteService.getNotesByUserAndAccess(user.getId());
+//        result.addObject("noteList", notes);
+//        result.addObject("author", noteService.author());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        result.addObject("authentication", authentication);
+        model.addAttribute("noteList", notes);
+        model.addAttribute("author", noteService.author());
+        model.addAttribute("authentication", authentication);
+        return "note/list";
     }
+
+//    public String note(Model model, Authentication authentication) {
+//        model.addAttribute("authentication", authentication);
+//        return "index";
+//    }
+
 
     @GetMapping("/note/error")
     public ModelAndView errorPage(@RequestParam("errorMessage") String errorMessage) {
@@ -84,7 +112,7 @@ public class NoteController {
     public String add(@ModelAttribute Note note, Authentication authentication) {
         if (isNoteFieldsValid(note)) {
             UserEntity user = userRepository.findByUsername(authentication.getName()).get();
-            note.setUser(user);
+            note.setUser(user.getId());
             noteService.add(note);
             return "redirect:/note/list";
         }
@@ -100,7 +128,7 @@ public class NoteController {
         return result;
     }
 
-    @PostMapping("/note/edit")
+     @PostMapping("/note/edit")
     public RedirectView editNote(@ModelAttribute Note note, RedirectAttributes attributes) {
         if (isNoteFieldsValid(note)) {
             noteService.update(note);
@@ -151,10 +179,7 @@ public class NoteController {
         return "auth/register";
     }
     @GetMapping("/login")
-    public String showLoginForm(@RequestParam(required = false, name = "error") String error, Model model) {
-        if (error != null) {
-            model.addAttribute("authenticationError", error);
-        }
+    public String showLoginForm() {
         return "auth/login";
     }
     @PostMapping("/register")
