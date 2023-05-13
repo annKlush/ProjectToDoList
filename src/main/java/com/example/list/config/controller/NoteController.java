@@ -148,7 +148,10 @@ public class NoteController {
         return "auth/register";
     }
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(@RequestParam(required = false, name = "error") String error, Model model) {
+        if (error != null) {
+            model.addAttribute("authenticationError", error);
+        }
         return "auth/login";
     }
     @PostMapping("/register")
