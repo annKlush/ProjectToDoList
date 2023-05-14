@@ -58,11 +58,11 @@ public class Note {
         this.accessType = accessType;
     }
 
-    public Long getUser() {
+    public Long getUserid() {
         return userid;
     }
 
-    public void setUser(Long user_id) {
+    public void setUserid(Long user_id) {
         this.userid = user_id;
     }
 

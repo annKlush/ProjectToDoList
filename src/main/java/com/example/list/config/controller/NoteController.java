@@ -114,7 +114,7 @@ public String note(Model model, Authentication authentication) {
     public String add(@ModelAttribute Note note, Authentication authentication) {
         if (isNoteFieldsValid(note)) {
             UserEntity user = userRepository.findByUsername(authentication.getName()).get();
-            note.setUser(user.getId());
+            note.setUserid(user.getId());
             noteService.add(note);
             return "redirect:/note/list";
         }
