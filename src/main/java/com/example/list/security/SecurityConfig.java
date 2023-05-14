@@ -31,7 +31,6 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login", "/register", "/auth/SignUp", "/", "/auth/register", "/note/error", "index", "/index").permitAll()
-               // .failureUrl("/login?error=true")
                 .antMatchers("/**").authenticated()
                 .and()
                 .formLogin()

@@ -13,8 +13,7 @@
   <h2 class="text-center my-4">Edit Note</h2>
   <form th:action="@{/note/edit}" method="post" th:object="${note}">
     <div class="form-group">
-      <label for="id">Note ID:</label>
-      <input type="text" class="form-control" id="id" name="id" th:value="${note.id}" readonly>
+      <input type="hidden" class="form-control" id="id" name="id" th:value="${note.id}" readonly>
     </div>
     <div class="form-group">
       <label for="title">Title:</label>
@@ -37,8 +36,8 @@
       </div>
     </div>
     <br>
-    <td><a class="btn btn-primary btn-block" th:href="@{/note/edit(id=${note.id})}">Restart editing</a></td>
     <button class="btn btn-primary btn-block" type="submit">Save changes</button>
+    <td><a class="btn btn-primary btn-block" th:href="@{/note/edit(id=${note.id})}">Restart editing</a></td>
   </form>
   <br>
   <a class="link-opacity-75" href="/note/list">Back to List</a>
