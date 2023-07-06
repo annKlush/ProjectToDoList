@@ -2,6 +2,7 @@ package com.example.list.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,10 +17,10 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository

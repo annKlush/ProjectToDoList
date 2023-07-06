@@ -6,6 +6,7 @@ import com.example.list.user.UserService;
 import com.example.list.user.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +22,6 @@ import java.util.List;
 public class NoteService {
     @Autowired
     private final NoteRepository noteRepository;
-
-//    @Autowired
-//    private final UserRepository userRepository;
-
-    public List<Note> getAll() {
-        return noteRepository.findAll();
-    }
-
 
     public Note add(Note note) {
         return noteRepository.save(note);

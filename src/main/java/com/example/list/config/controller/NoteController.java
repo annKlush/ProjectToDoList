@@ -37,54 +37,23 @@ public class NoteController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-//    @GetMapping("/")
-//    @ResponseBody
-//    public ModelAndView note(Model model, Authentication authentication) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.addObject("authentication", authentication);
-//        modelAndView.setViewName("index");
-//        return modelAndView;
-//    }
 @GetMapping("/")
 public String note(Model model, Authentication authentication) {
     model.addAttribute("authentication", authentication);
     return "index";
 }
 
-//    @GetMapping("/note/list")
-//    public ModelAndView getAllNotes() {
-//        ModelAndView result = new ModelAndView("note/list");
-//        UserEntity user = userRepository.findByUsername(noteService.author()).get();
-//        List<Note> notes = noteService.getNotesByUserAndAccess(user.getId());
-//        result.addObject("noteList", notes);
-//        result.addObject("author", noteService.author());
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        result.addObject("authentication", authentication);
-//        return result;
-//    }
-
     @GetMapping("/note/list")
     public String getAllNotes(Model model) {
-        //ModelAndView result = new ModelAndView("note/list");
         UserEntity user = userRepository.findByUsername(noteService.author()).get();
-
         List<Note> notes = noteService.getNotesByUserAndAccess(user.getId());
-//        result.addObject("noteList", notes);
-//        result.addObject("author", noteService.author());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        result.addObject("authentication", authentication);
         model.addAttribute("noteList", notes);
         model.addAttribute("author", noteService.author());
         model.addAttribute("authentication", authentication);
         return "note/list";
 
     }
-
-//    public String note(Model model, Authentication authentication) {
-//        model.addAttribute("authentication", authentication);
-//        return "index";
-//    }
-
 
     @GetMapping("/note/error")
     public ModelAndView errorPage(@RequestParam("errorMessage") String errorMessage) {
@@ -176,6 +145,7 @@ public String note(Model model, Authentication authentication) {
             return er;
         }
     }
+
     @GetMapping("/register")
     public String showRegistrationForm() {
         return "auth/register";
@@ -195,7 +165,6 @@ public String note(Model model, Authentication authentication) {
 
         return new RedirectView("/login");
     }
-
 
     @PostMapping("/login")
     public RedirectView processLogin(@ModelAttribute LoginDto loginDto) {
@@ -219,5 +188,4 @@ public String note(Model model, Authentication authentication) {
         }
         return "redirect:/auth/login";
     }
-
 }
